@@ -46,8 +46,35 @@ Convert the alignment results into files with lower resolution but smaller size 
 You can visualize these results in the UCSC genome browser or IGV genome browser.
 
 
-## Part IV 
+## Part IV Analysis of Gene Expression
+In this section, you will acquire gene expression data and perform a series of analyses based on it.
+
+### i. Quantification for genomic features: BAM2TAB
 Count mapped reads for genomic features such as genes.
+
+### ii.Identify differentially expressed genes
+
+#### 1. Observe batch effect
+Batch effects between samples can be identified, allowing for either correction or selective sample screening as needed.
+
+#### 2. Scale the gene expression
+Calculate TPM(TPM, Transcripts Per Kilobase of exon model per Million mapped reads) through gene length and sequencing depth.
+
+#### 3. Calculate the difference between two groups
+Calculate logFC and p value for each gene between two groups using read counts.
+
+#### 4. Filter out differentially expressed genes
+Set filtering criterion, and obtain differentially expressed genes.
+
+
+Draw volcano and heat maps
+
+
+#### 5.Functional analysis
+GO (GO, Gene Ontology) Enrichment Analysis
+
+
+KEGG (KEGG, Kyoto Encyclopedia of Genes and Genomes) Enrichment Analysis
 
 
 
