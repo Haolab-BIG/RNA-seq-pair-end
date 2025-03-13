@@ -15,12 +15,23 @@ Here stands an throughout file structure of RNA-seq (pair-end) data analysis.
 
 ### iii. Conda Environment
 You can configure a Conda environment named 'RNA-seq-pair-end' using the following code, which includes the essential software for RNA-seq (pair-end) analysis.
+```
+conda create --name RNA-seq-pair-end python=3.9
+conda config --add channels bioconda conda-forge
+
+conda install trim-galore picard subread deeptools homer
+
+
+```
 
 ## Part II Generation of Data for Analysis: FASTQ2BAM
 In this section, you will convert the raw FASTQ files into BAM files, which can be used for subsequent analysis.
 ### i. Raw Data Quality Check(QC)
 You can perform quality check on the raw data to assess the sequencing quality.
-
+```
+mkdir 2.FastQC
+fastqc -o 2.FastQC --noextract -f fastq ./1.rawdata/*.fq.gz -t 16 >2.FastQC/fastqc.log 2>&1 &
+```
 ### ii. Trimming After QC
 Based on the quality control results, you can perform appropriate trimming on the raw data.
 
