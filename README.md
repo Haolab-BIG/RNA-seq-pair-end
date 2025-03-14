@@ -17,11 +17,11 @@ Here stands an throughout file structure of RNA-seq (pair-end) data analysis.
 You can configure a Conda environment named 'RNA-seq-pair-end' using the following code, which includes the essential software for RNA-seq (pair-end) analysis.
 ```
 conda create --name RNA-seq-pair-end python=3.9
-conda config --add channels bioconda conda-forge
-
-conda install trim-galore picard subread deeptools homer
-
-
+conda install bioconda::trim-galore
+conda install bioconda::picard
+conda install bioconda::subread
+conda install deeptools
+conda install bioconda::homer
 ```
 
 ## Part II Generation of Data for Analysis: FASTQ2BAM
@@ -124,16 +124,56 @@ featureCounts -a ./Index/gencode.v47.annotation.gtf -s 2 -p --countReadPairs -B 
 ```
 ### ii.Identify differentially expressed genes
 
-#### 1. Observe batch effect
+#### 1. Scale the gene expression
+Calculate TPM(TPM, Transcripts Per Kilobase of exon model per Million mapped reads) through gene length and sequencing depth.
+```
+featureCountsPath <-
+setwd(featureCountsPath)
+
+total.counts <- read.table("TotalSample.txt", sep = "\t", header= T, quote = "")
+total.counts <- total.counts[,-c(2,3,4,5)]
+total.counts$Geneid <- sub("\\..*$","",total.counts$Geneid)
+colnames(total.counts) <- gsub("X5.removeDup.|_removeDup.bam", "", colnames(total.counts))
+
+total.feature <- total.counts
+rownames(total.feature) <- total.feature$Geneid
+total.feature <- total.feature[,-1]
+total.feature$kb <- total.feature$Length/1000
+total.rpk <- total.feature[,c(2:(ncol(total.feature)-1))] / total.feature$kb
+total.tpm <- as.data.frame(t(t(total.rpk)/colSums(total.rpk) * 1000000))
+
+```
+#### 2. Observe batch effect
 Batch effects between samples can be identified, allowing for either correction or selective sample screening as needed.
 ```
+pca.info <- fast.prcomp(total.tpm)
+pca.data <- data.frame(sample = rownames(pca.info$rotation),pca.info$rotation)
 
+pc_contribution <- (pca.info$sdev^2) / sum(pca.info$sdev^2)
+pc1_contribution <- round(pc_contribution[1] * 100, 2)
+pc2_contribution <- round(pc_contribution[2] * 100, 2)
+
+p <- ggscatter(pca.data, x = "PC1", y = "PC2", color = "sample") +
+  scale_color_manual(values = c(
+    "231_CO"="#8c510a","231_CO.rep1"="#bf812d","231_CO.rep2"="#dfc27d","231_CO.rep3"="#f6e8c3",
+    "231_MO"="#01665e","231_MO.rep1"="#35978f","231_MO.rep2"="#80cdc1","231_MO.rep3"="#c7eae5",
+    "iN_CO"="#762a83","iN_CO.rep1"="#9970ab","iN_CO.rep2"="#c2a5cf","iN_CO.rep3"="#e7d4e8",
+    "iN_MO"="#2166ac","iN_MO.rep1"="#4393c3","iN_MO.rep2"="#92c5de","iN_MO.rep3"="#d1e5f0"
+  )) +
+  theme_base() +
+  labs(
+    x = paste("PC1 (", pc1_contribution, "%)", sep=""),
+    y = paste("PC2 (", pc2_contribution, "%)", sep="")
+  )
+
+ggsave("PCA_total.pdf", plot = p, device = "pdf", width = 8, height = 4, path = featureCountsPath)
 ```
-#### 2. Scale the gene expression
-Calculate TPM(TPM, Transcripts Per Kilobase of exon model per Million mapped reads) through gene length and sequencing depth.
-
 #### 3. Calculate the difference between two groups
 Calculate logFC and p value for each gene between two groups using read counts.
+```
+IN.count <- total.counts[,c(1,12:14,16:18)]  #Genid and selected samples
+write.table(IN.count,"IN.count.txt",sep = "\t",col.names = T,row.names = F,quote = F)
+```
 ```
 getDiffExpression.pl 6.featureCounts/IN.count.txt IN_CO IN_CO IN_CO IN_MO IN_MO IN_MO -edgeR > 6.featureCounts/diffOutput_IN.txt 2> 6.featureCounts/diffOutput_IN.log &
 ```
