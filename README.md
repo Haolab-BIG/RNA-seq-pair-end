@@ -12,6 +12,66 @@ We will proceed by structuring our workflow according to (ii).
 ### ii. File Structure
 Here stands an throughout file structure of RNA-seq (pair-end) data analysis.
 * *You can decide what your structure looks like, which makes it more efficient to work.*
+```
+RNA-seq
+├── 1.rawdata
+│   ├── iN_CO.rep1_raw_1.fq.gz
+│   ├── iN_CO.rep1_raw_2.fq.gz
+├── 2.FastQC
+│   ├── fastqc.log
+│   ├── iN_CO.rep1_raw_1_fastqc.html
+│   ├── iN_CO.rep1_raw_1_fastqc.zip
+│   ├── iN_CO.rep1_raw_2_fastqc.html
+│   ├── iN_CO.rep1_raw_2_fastqc.zip
+├── 3.trim
+│   ├── iN_CO.rep1_raw_1.fq.gz_trimming_report.txt
+│   ├── iN_CO.rep1_raw_1_val_1_fastqc.html
+│   ├── iN_CO.rep1_raw_1_val_1_fastqc.zip
+│   ├── iN_CO.rep1_raw_1_val_1.fq.gz
+│   ├── iN_CO.rep1_raw_2.fq.gz_trimming_report.txt
+│   ├── iN_CO.rep1_raw_2_val_2_fastqc.html
+│   ├── iN_CO.rep1_raw_2_val_2_fastqc.zip
+│   ├── iN_CO.rep1_raw_2_val_2.fq.gz
+│   ├── trim-iN_CO.rep1.log
+├── 4.StarResult
+│   ├── iN_CO.rep1_Aligned.sortedByCoord.out.bam
+│   ├── iN_CO.rep1_Aligned.sortedByCoord.out.bam.bai
+│   ├── iN_CO.rep1_Log.final.out
+│   ├── iN_CO.rep1_Log.out
+│   ├── iN_CO.rep1_Log.progress.out
+│   ├── iN_CO.rep1_ReadsPerGene.out.tab
+│   ├── iN_CO.rep1_SJ.out.tab
+├── 5.removeDup
+│   ├── iN_CO.rep1_marked_dup_metrics.txt
+│   ├── iN_CO.rep1_readgroup.bam
+│   ├── iN_CO.rep1_removeDup.bam
+│   ├── iN_CO.rep1_removeDup.bam.bai
+│   ├── read.group_iN_CO.rep1.log
+│   └── samflag.log
+├── 6.bw
+│   ├── bw.log
+│   ├── iN_CO.rep1_removeDup.bw
+├── 7.featureCounts
+│   ├── analysis.R
+│   ├── analysis.RData
+│   ├── diffOutput_IN.log
+│   ├── diffOutput_IN.txt
+│   ├── featureCounts.log
+│   ├── IN.count.txt
+│   ├── IN.go.heat.pdf
+│   ├── IN.go.pdf
+│   ├── IN.heatmap.pdf
+│   ├── IN.kegg.heat.pdf
+│   ├── IN.kegg.pdf
+│   ├── IN.sig.gene.txt
+│   ├── PCA_total.pdf
+│   ├── reads.summary
+│   ├── TotalSample.txt
+│   └── TotalSample.txt.summary
+│   ├── total.tpm.txt
+│   ├── volcano_bar_IN.pdf
+│   ├── volcano_IN.pdf
+```
 
 ### iii. Conda Environment
 You can configure a Conda environment named 'RNA-seq-pair-end' using the following code, which includes the essential software for RNA-seq (pair-end) analysis.
