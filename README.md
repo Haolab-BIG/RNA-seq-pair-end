@@ -16,13 +16,13 @@ Here stands an throughout file structure of RNA-seq (pair-end) data analysis.
 RNA-seq
 ├── 1.rawdata
 │   ├── iN_CO.rep1_raw_1.fq.gz
-│   ├── iN_CO.rep1_raw_2.fq.gz
+│   └── iN_CO.rep1_raw_2.fq.gz
 ├── 2.FastQC
 │   ├── fastqc.log
 │   ├── iN_CO.rep1_raw_1_fastqc.html
 │   ├── iN_CO.rep1_raw_1_fastqc.zip
 │   ├── iN_CO.rep1_raw_2_fastqc.html
-│   ├── iN_CO.rep1_raw_2_fastqc.zip
+│   └── iN_CO.rep1_raw_2_fastqc.zip
 ├── 3.trim
 │   ├── iN_CO.rep1_raw_1.fq.gz_trimming_report.txt
 │   ├── iN_CO.rep1_raw_1_val_1_fastqc.html
@@ -32,7 +32,7 @@ RNA-seq
 │   ├── iN_CO.rep1_raw_2_val_2_fastqc.html
 │   ├── iN_CO.rep1_raw_2_val_2_fastqc.zip
 │   ├── iN_CO.rep1_raw_2_val_2.fq.gz
-│   ├── trim-iN_CO.rep1.log
+│   └── trim-iN_CO.rep1.log
 ├── 4.StarResult
 │   ├── iN_CO.rep1_Aligned.sortedByCoord.out.bam
 │   ├── iN_CO.rep1_Aligned.sortedByCoord.out.bam.bai
@@ -40,7 +40,7 @@ RNA-seq
 │   ├── iN_CO.rep1_Log.out
 │   ├── iN_CO.rep1_Log.progress.out
 │   ├── iN_CO.rep1_ReadsPerGene.out.tab
-│   ├── iN_CO.rep1_SJ.out.tab
+│   └── iN_CO.rep1_SJ.out.tab
 ├── 5.removeDup
 │   ├── iN_CO.rep1_marked_dup_metrics.txt
 │   ├── iN_CO.rep1_readgroup.bam
@@ -50,7 +50,7 @@ RNA-seq
 │   └── samflag.log
 ├── 6.bw
 │   ├── bw.log
-│   ├── iN_CO.rep1_removeDup.bw
+│   └── iN_CO.rep1_removeDup.bw
 ├── 7.featureCounts
 │   ├── analysis.R
 │   ├── analysis.RData
@@ -67,10 +67,10 @@ RNA-seq
 │   ├── PCA_total.pdf
 │   ├── reads.summary
 │   ├── TotalSample.txt
-│   └── TotalSample.txt.summary
+│   ├── TotalSample.txt.summary
 │   ├── total.tpm.txt
 │   ├── volcano_bar_IN.pdf
-│   ├── volcano_IN.pdf
+│   └── volcano_IN.pdf
 ```
 
 ### iii. Conda Environment
