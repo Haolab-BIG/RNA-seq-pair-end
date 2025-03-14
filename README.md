@@ -138,8 +138,7 @@ rownames(total.feature) <- total.feature$Geneid
 total.feature <- total.feature[,-1]
 total.feature$kb <- total.feature$Length/1000
 total.rpk <- total.feature[,c(2:(ncol(total.feature)-1))] / total.feature$kb
-total.tpm <- as.data.frame(t(t(total.rpk)/colSums(total.rpk) * 1000000))
-
+total.tpm <- as.data.frame(t(t(total.rpk)/colSums(total.rpk) * 1000000)
 ```
 #### 2. Observe batch effect
 Batch effects between samples can be identified, allowing for either correction or selective sample screening as needed.
@@ -161,15 +160,13 @@ p <- ggscatter(pca.data, x = "PC1", y = "PC2", color = "sample") +
     x = paste("PC1 (", pc1_contribution, "%)", sep=""),
     y = paste("PC2 (", pc2_contribution, "%)", sep="")
   )
-
 ggsave("PCA_total.pdf", plot = p, device = "pdf", width = 8, height = 4, path = featureCountsPath)
+IN.count <- total.counts[,c(1,12:14,16:18)]  #Geneid and selected samples
+write.table(IN.count,"IN.count.txt",sep = "\t",col.names = T,row.names = F,quote = F)
 ```
 #### 3. Calculate the difference between two groups
 Calculate logFC and p value for each gene between two groups using read counts.
-```
-IN.count <- total.counts[,c(1,12:14,16:18)]  #Genid and selected samples
-write.table(IN.count,"IN.count.txt",sep = "\t",col.names = T,row.names = F,quote = F)
-```
+
 ```
 getDiffExpression.pl 7.featureCounts/IN.count.txt IN_CO IN_CO IN_CO IN_MO IN_MO IN_MO -edgeR > 7.featureCounts/diffOutput_IN.txt 2> 7.featureCounts/diffOutput_IN.log &
 ```
