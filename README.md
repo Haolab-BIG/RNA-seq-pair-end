@@ -129,12 +129,10 @@ Calculate TPM(TPM, Transcripts Per Kilobase of exon model per Million mapped rea
 ```
 featureCountsPath <-
 setwd(featureCountsPath)
-
 total.counts <- read.table("TotalSample.txt", sep = "\t", header= T, quote = "")
 total.counts <- total.counts[,-c(2,3,4,5)]
 total.counts$Geneid <- sub("\\..*$","",total.counts$Geneid)
 colnames(total.counts) <- gsub("X5.removeDup.|_removeDup.bam", "", colnames(total.counts))
-
 total.feature <- total.counts
 rownames(total.feature) <- total.feature$Geneid
 total.feature <- total.feature[,-1]
@@ -148,11 +146,9 @@ Batch effects between samples can be identified, allowing for either correction 
 ```
 pca.info <- fast.prcomp(total.tpm)
 pca.data <- data.frame(sample = rownames(pca.info$rotation),pca.info$rotation)
-
 pc_contribution <- (pca.info$sdev^2) / sum(pca.info$sdev^2)
 pc1_contribution <- round(pc_contribution[1] * 100, 2)
 pc2_contribution <- round(pc_contribution[2] * 100, 2)
-
 p <- ggscatter(pca.data, x = "PC1", y = "PC2", color = "sample") +
   scale_color_manual(values = c(
     "231_CO"="#8c510a","231_CO.rep1"="#bf812d","231_CO.rep2"="#dfc27d","231_CO.rep3"="#f6e8c3",
@@ -183,7 +179,6 @@ Set filtering criterion, and obtain differentially expressed genes.
 IN.homer <-  read.table("diffOutput_IN.txt",sep = "\t", header = T, quote = "")
 colnames(IN.homer)[1:7] <- colnames(IN.count)
 colnames(IN.homer)[8:10] <- c("logFC","p","p.adj")
-
 IN.up <- IN.homer[IN.homer$p<0.05 & IN.homer$logFC>1,]
 IN.down <- IN.homer[IN.homer$p<0.05 & IN.homer$logFC< -1,]
 IN.notsig <- IN.homer[!IN.homer$Geneid%in%IN.up$Geneid & !IN.homer$Geneid%in%IN.down$Geneid,]
@@ -234,7 +229,6 @@ GO (GO, Gene Ontology) Enrichment Analysis
 ```
 library(org.Hs.eg.db)
 keytypes(org.Hs.eg.db)
-
 IN.sig.gene <- rbind(IN.up,IN.down)
 IN.sig.gene <- IN.sig.gene %>% select(Geneid, logFC, p, p.adj)
 row.names(IN.sig.gene) <- IN.sig.gene$Geneid
@@ -249,11 +243,9 @@ IN.sig.gene$entriz = mapIds(x= org.Hs.eg.db,
                             column ="ENTREZID",
                             multiVals = "first")
 write.table(IN.sig.gene,"IN.sig.gene.txt",sep="\t",col.names = T,row.names = F,quote = F)
-
 IN.sig.gene.old <- na.omit(IN.sig.gene)
 logFC <- IN.sig.gene.old$logFC
 names(logFC) <- IN.sig.gene.old$symbol
-
 library(clusterProfiler)
 GOenrich = enrichGO(gene = IN.sig.gene.old$entriz, 
                       OrgDb = org.Hs.eg.db,
@@ -269,11 +261,9 @@ GOenrich.top10 <- as.data.frame(GOenrich@result) %>%
   arrange(p.adjust) %>%
   slice_head(n = 10)
 top10_results@result <- GOenrich.top10
-
 pdf(file = "IN.go.heat.pdf", width =12, height = 4)
 heatplot(top10_results, foldChange=logFC)
 dev.off()
-
 GOenrich.top10$logp.adj <- -log10(GOenrich.top10$p.adjust)
 GOenrich.plot <- ggplot(data=GOenrich.top10, aes(x=Description, y=logp.adj )) +
   geom_bar(stat = "identity", fill = "#d33682", width = 0.8) + 
@@ -303,7 +293,6 @@ top10_results <- setReadable(top10_results, OrgDb = org.Hs.eg.db, keyType = "ENT
 pdf(file = "IN.kegg.heat.pdf", width =12, height = 4)
 heatplot(top10_results, foldChange=logFC)
 dev.off()
-
 KEGGenrich.top10$logp.adj <- -log10(KEGGenrich.top10$p.adjust)
 KEGGenrich.plot <- ggplot(data=KEGGenrich.top10, aes(x=Description, y=logp.adj )) +
   geom_bar(stat = "identity", fill = "#d33682", width = 0.8) + 
