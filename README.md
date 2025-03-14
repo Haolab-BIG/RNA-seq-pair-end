@@ -295,7 +295,7 @@ KEGGenrich.plot <- ggplot(data=KEGGenrich.top10, aes(x=Description, y=logp.adj )
   geom_hline(yintercept = -log10(0.05), linetype = "dashed") +
   xlab("KEGG pathway") + 
   theme(axis.text=element_text(color="black")) +
-  labs(title = "TOP 10 enriched KEGG pathway", y = expression("-log"[10]*" (p.adj)"),  x = ""
+  labs(title = "TOP 10 enriched KEGG pathway", y = expression("-log"[10]*" (p.adj)"),  x = "")
 ggsave("IN.KEGG.pdf", plot = KEGGenrich.plot, width = 8, height = 5)
 ```
 
