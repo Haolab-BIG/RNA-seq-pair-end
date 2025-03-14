@@ -8,7 +8,7 @@ As illustrated in the figure,
 (i) yellow circles represent the steps where commands need to be entered;
 (ii) pink dashed rectangular boxes represent the output results after processing at each step.
 We will proceed by structuring our workflow according to (ii).
-
+![RNA-seq-pair-end.png](https://github.com/Haolab-BIG/RNA-seq-pair-end/blob/main/RNA-seq-pair-end.png)
 ### ii. File Structure
 Here stands an throughout file structure of RNA-seq (pair-end) data analysis.
 * *You can decide what your structure looks like, which makes it more efficient to work.*
@@ -17,6 +17,8 @@ Here stands an throughout file structure of RNA-seq (pair-end) data analysis.
 You can configure a Conda environment named 'RNA-seq-pair-end' using the following code, which includes the essential software for RNA-seq (pair-end) analysis.
 ```
 conda create --name RNA-seq-pair-end python=3.9
+conda config --add channels bioconda
+conda config --add channels conda-forge
 conda install bioconda::trim-galore
 conda install bioconda::picard
 conda install bioconda::subread
