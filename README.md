@@ -105,7 +105,7 @@ Convert the alignment results into files with lower resolution but smaller size 
 ### i. Visualization on Genome Browser
 You can visualize these results in the UCSC genome browser or IGV genome browser.
 ```
-mkdir 7.bw
+mkdir 6.bw
 for file in 1.rawdata/*_raw_1.fq.gz; do
     filename=$(echo "$file" | sed -E 's|1.rawdata/(.*)_raw_1.fq.gz|\1|')
     echo ${filename}_removeDup.bam >> 7.bw/bw.log
@@ -119,8 +119,8 @@ In this section, you will acquire gene expression data and perform a series of a
 ### i. Quantification for genomic features: BAM2TAB
 Count mapped reads for genomic features such as genes.
 ```
-mkdir 6.featureCounts
-featureCounts -a ./Index/gencode.v47.annotation.gtf -s 2 -p --countReadPairs -B -T 30  --ignoreDup -o ./6.featureCounts/TotalSample.txt 5.removeDup/*_removeDup.bam  > ./6.featureCounts/featureCounts.log 2>&1 &
+mkdir 7.featureCounts
+featureCounts -a ./Index/gencode.v47.annotation.gtf -s 2 -p --countReadPairs -B -T 30  --ignoreDup -o ./7.featureCounts/TotalSample.txt 5.removeDup/*_removeDup.bam  > ./7.featureCounts/featureCounts.log 2>&1 &
 ```
 ### ii.Identify differentially expressed genes
 
@@ -175,7 +175,7 @@ IN.count <- total.counts[,c(1,12:14,16:18)]  #Genid and selected samples
 write.table(IN.count,"IN.count.txt",sep = "\t",col.names = T,row.names = F,quote = F)
 ```
 ```
-getDiffExpression.pl 6.featureCounts/IN.count.txt IN_CO IN_CO IN_CO IN_MO IN_MO IN_MO -edgeR > 6.featureCounts/diffOutput_IN.txt 2> 6.featureCounts/diffOutput_IN.log &
+getDiffExpression.pl 7.featureCounts/IN.count.txt IN_CO IN_CO IN_CO IN_MO IN_MO IN_MO -edgeR > 7.featureCounts/diffOutput_IN.txt 2> 7.featureCounts/diffOutput_IN.log &
 ```
 #### 4. Filter out differentially expressed genes
 Set filtering criterion, and obtain differentially expressed genes.
@@ -300,7 +300,7 @@ KEGGenrich.top10 <- KEGGenrich[order(KEGGenrich$p.adjust,decreasing = F)[1:10],]
 top10_results@result <- KEGGenrich.top10
 top10_results <- setReadable(top10_results, OrgDb = org.Hs.eg.db, keyType = "ENTREZID")
 
-pdf(file = "IN.kegg.heat.pdf", width =12, height = 4)  # PDF 的宽度和高度以英寸为单位
+pdf(file = "IN.kegg.heat.pdf", width =12, height = 4)
 heatplot(top10_results, foldChange=logFC)
 dev.off()
 
