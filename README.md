@@ -20,7 +20,7 @@ conda create --name RNA-seq-pair-end python=3.9
 conda install bioconda::trim-galore
 conda install bioconda::picard
 conda install bioconda::subread
-conda install deeptools
+conda install bioconda::deeptools
 conda install bioconda::homer
 ```
 
@@ -179,11 +179,56 @@ getDiffExpression.pl 6.featureCounts/IN.count.txt IN_CO IN_CO IN_CO IN_MO IN_MO 
 ```
 #### 4. Filter out differentially expressed genes
 Set filtering criterion, and obtain differentially expressed genes.
+```
+IN.homer <-  read.table("diffOutput_IN.txt",sep = "\t", header = T, quote = "")
+colnames(IN.homer)[1:7] <- colnames(IN.count)
+colnames(IN.homer)[8:10] <- c("logFC","p","p.adj")
 
-
+IN.up <- IN.homer[IN.homer$p<0.05 & IN.homer$logFC>1,]
+IN.down <- IN.homer[IN.homer$p<0.05 & IN.homer$logFC< -1,]
+IN.notsig <- IN.homer[!IN.homer$Geneid%in%IN.up$Geneid & !IN.homer$Geneid%in%IN.down$Geneid,]
+```
 Draw volcano and heat maps
-
-
+```
+p <-ggplot() +
+  geom_point(data = IN.notsig, aes(x = logFC, y = -log10(p)), size = 1, col = "grey") +
+  geom_point(data = IN.up, aes(x = logFC, y = -log10(p)), col = "#c51b7d", size = 1) +
+  geom_point(data = IN.down, aes(x = logFC, y = -log10(p)), col = "#4d9221", size = 1) +
+  theme_bw() +
+  ggtitle("IN_CO VS IN_MO")+
+  ylim(0, 25) + 
+  xlim(-7.5,7.5) +
+  ylab(expression("-log"[10]*" (p)")) +
+  xlab(expression("log"[2]*"FC")) +
+  theme(
+    plot.title = element_text(hjust = 0.5)
+  )
+ggsave("volcano_IN.pdf", plot = p, device = "pdf", width = 3, height = 3, path = featureCountsPath)
+IN.table <- data.frame(Group = c("up","down") ,number = c(nrow(IN.up),nrow(IN.down)))
+p <- ggplot(IN.table, aes(x = Group, y = number, fill = Group)) + 
+  geom_bar(stat = "identity", position = "dodge", width = 0.7) +
+  geom_text(aes(label = number, y = number / 2), hjust = 1.5, color="white") +
+  scale_fill_manual(values = c("up" = "#c51b7d", "down" = "#4d9221")) +
+  coord_flip() +
+  theme_void() +
+  theme(legend.position = "none") +
+  labs(title = NULL, x = NULL, y = NULL)
+ggsave("volcano_bar_IN.pdf", plot = p, device = "pdf", width = 1, height = 0.5, path = featureCountsPath)
+IN.sig.tpm <- total.tpm[rownames(total.tpm) %in% c(IN.up$Geneid, IN.down$Geneid),
+                          intersect(colnames(total.tpm), colnames(IN.count))]
+IN.sig.tpm.nor <- as.data.frame(t(scale(t(IN.sig.tpm))))
+p<-pheatmap(IN.sig.tpm.nor, 
+            cluster_cols = F,
+            cluster_rows = T,
+            clustering_distance_rows = "euclidean", 
+            clustering_method = "ward.D2",
+            cutree_rows = 2,
+            #annotation_row=diff.sig.clusters,
+            #annotation_colors = annotation_colors,
+            show_rownames = F,
+            show_colnames = TRUE)
+ggsave("IN.heatmap.pdf", plot = p, device = "pdf", width = 4, height = 8, path = featureCountsPath)
+```
 #### 5.Functional analysis
 GO (GO, Gene Ontology) Enrichment Analysis
 
