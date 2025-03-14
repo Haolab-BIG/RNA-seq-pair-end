@@ -302,6 +302,8 @@ IN.sig.gene$entriz = mapIds(x= org.Hs.eg.db,
                             column ="ENTREZID",
                             multiVals = "first")
 write.table(IN.sig.gene,"IN.sig.gene.txt",sep="\t",col.names = T,row.names = F,quote = F)
+```
+```
 IN.sig.gene.old <- na.omit(IN.sig.gene)
 logFC <- IN.sig.gene.old$logFC
 names(logFC) <- IN.sig.gene.old$symbol
