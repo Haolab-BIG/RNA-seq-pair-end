@@ -231,13 +231,90 @@ ggsave("IN.heatmap.pdf", plot = p, device = "pdf", width = 4, height = 8, path =
 ```
 #### 5.Functional analysis
 GO (GO, Gene Ontology) Enrichment Analysis
+```
+library(org.Hs.eg.db)
+keytypes(org.Hs.eg.db)
 
+IN.sig.gene <- rbind(IN.up,IN.down)
+IN.sig.gene <- IN.sig.gene %>% select(Geneid, logFC, p, p.adj)
+row.names(IN.sig.gene) <- IN.sig.gene$Geneid
+IN.sig.gene$symbol = mapIds(x= org.Hs.eg.db, 
+                            keys = IN.sig.gene$Geneid,
+                            keytype="ENSEMBL",
+                            column ="SYMBOL",
+                            multiVals = "first")
+IN.sig.gene$entriz = mapIds(x= org.Hs.eg.db, 
+                            keys = IN.sig.gene$Geneid,
+                            keytype="ENSEMBL",
+                            column ="ENTREZID",
+                            multiVals = "first")
+write.table(IN.sig.gene,"IN.sig.gene.txt",sep="\t",col.names = T,row.names = F,quote = F)
 
+IN.sig.gene.old <- na.omit(IN.sig.gene)
+logFC <- IN.sig.gene.old$logFC
+names(logFC) <- IN.sig.gene.old$symbol
+
+library(clusterProfiler)
+GOenrich = enrichGO(gene = IN.sig.gene.old$entriz, 
+                      OrgDb = org.Hs.eg.db,
+                      keyType ="ENTREZID",
+                      pAdjustMethod ='BH',
+                      ont = "ALL",
+                      pvalueCutoff=0.05,
+                      qvalueCutoff=0.05,
+                      readable =T)
+
+top10_results <- GOenrich
+GOenrich.top10 <- as.data.frame(GOenrich@result) %>%
+  arrange(p.adjust) %>%
+  slice_head(n = 10)
+top10_results@result <- GOenrich.top10
+
+pdf(file = "IN.go.heat.pdf", width =12, height = 4)
+heatplot(top10_results, foldChange=logFC)
+dev.off()
+
+GOenrich.top10$logp.adj <- -log10(GOenrich.top10$p.adjust)
+GOenrich.plot <- ggplot(data=GOenrich.top10, aes(x=Description, y=logp.adj )) +
+  geom_bar(stat = "identity", fill = "#d33682", width = 0.8) + 
+  coord_flip() + 
+  theme_test() + 
+  geom_hline(yintercept = -log10(0.05), linetype = "dashed") +
+  xlab("GO term") + 
+  theme(axis.text=element_text(color="black")) +
+  labs(title = "TOP 10 enriched GO term", y = expression("-log"[10]*" (p.adj)"),  x = "")
+ggsave("IN.go.pdf", plot = GOenrich.plot, width = 5, height = 5)
+
+```
 KEGG (KEGG, Kyoto Encyclopedia of Genes and Genomes) Enrichment Analysis
+```
+KEGGenrich = enrichKEGG(gene =IN.sig.gene.old$entriz, 
+                          keyType = "kegg",
+                          pAdjustMethod ='BH',
+                          organism= "hsa",
+                          qvalueCutoff =0.05,
+                          pvalueCutoff=0.05)
 
+top10_results <- KEGGenrich
+KEGGenrich.top10 <- KEGGenrich[order(KEGGenrich$p.adjust,decreasing = F)[1:10],]
+top10_results@result <- KEGGenrich.top10
+top10_results <- setReadable(top10_results, OrgDb = org.Hs.eg.db, keyType = "ENTREZID")
 
+pdf(file = "IN.kegg.heat.pdf", width =12, height = 4)  # PDF 的宽度和高度以英寸为单位
+heatplot(top10_results, foldChange=logFC)
+dev.off()
 
-
+KEGGenrich.top10$logp.adj <- -log10(KEGGenrich.top10$p.adjust)
+KEGGenrich.plot <- ggplot(data=KEGGenrich.top10, aes(x=Description, y=logp.adj )) +
+  geom_bar(stat = "identity", fill = "#d33682", width = 0.8) + 
+  coord_flip() + 
+  theme_test() + 
+  geom_hline(yintercept = -log10(0.05), linetype = "dashed") +
+  xlab("KEGG pathway") + 
+  theme(axis.text=element_text(color="black")) +
+  labs(title = "TOP 10 enriched KEGG pathway", y = expression("-log"[10]*" (p.adj)"),  x = ""
+ggsave("IN.KEGG.pdf", plot = KEGGenrich.plot, width = 8, height = 5)
+```
 
 
 
