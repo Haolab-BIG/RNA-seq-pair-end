@@ -252,7 +252,6 @@ GOenrich = enrichGO(gene = IN.sig.gene.old$entriz,
                       pvalueCutoff=0.05,
                       qvalueCutoff=0.05,
                       readable =T)
-
 top10_results <- GOenrich
 GOenrich.top10 <- as.data.frame(GOenrich@result) %>%
   arrange(p.adjust) %>%
@@ -281,12 +280,10 @@ KEGGenrich = enrichKEGG(gene =IN.sig.gene.old$entriz,
                           organism= "hsa",
                           qvalueCutoff =0.05,
                           pvalueCutoff=0.05)
-
 top10_results <- KEGGenrich
 KEGGenrich.top10 <- KEGGenrich[order(KEGGenrich$p.adjust,decreasing = F)[1:10],]
 top10_results@result <- KEGGenrich.top10
 top10_results <- setReadable(top10_results, OrgDb = org.Hs.eg.db, keyType = "ENTREZID")
-
 pdf(file = "IN.kegg.heat.pdf", width =12, height = 4)
 heatplot(top10_results, foldChange=logFC)
 dev.off()
