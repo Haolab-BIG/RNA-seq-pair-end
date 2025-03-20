@@ -85,6 +85,7 @@ conda install bioconda::subread
 conda install bioconda::deeptools
 conda install bioconda::homer
 conda install bioconda::star
+conda install bioconda::samtools
 ```
 
 ## Part II Generation of Data for Analysis: FASTQ2BAM
