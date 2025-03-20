@@ -154,11 +154,11 @@ done
 Remove duplicate sequences.
 ```
 for file in 1.rawdata/*_1.fq.gz; do
-    filename=$(echo "$file" | sed -E 's|1.rawdata/(.*)_raw_1.fq.gz|\1|')
+    filename=$(echo "$file" | sed -E 's|1.rawdata/(.*)_1.fq.gz|\1|')
     picard MarkDuplicates I=5.removeDup/${filename}_readgroup.bam O=5.removeDup/${filename}_removeDup.bam M=5.removeDup/${filename}_marked_dup_metrics.txt REMOVE_DUPLICATES=true READ_NAME_REGEX=null >5.removeDup/MarkDuplicates_${filename}.log 2>&1 &
 done
-for file in 1.rawdata/*_raw_1.fq.gz; do
-    filename=$(echo "$file" | sed -E 's|1.rawdata/(.*)_raw_1.fq.gz|\1|')
+for file in 1.rawdata/*_1.fq.gz; do
+    filename=$(echo "$file" | sed -E 's|1.rawdata/(.*)_1.fq.gz|\1|')
     echo ${filename}_removeDup.bam >>5.removeDup/samflag.log
     samtools flagstat -@ 10 5.removeDup/${filename}_removeDup.bam >> 5.removeDup/samflag.log
 done
