@@ -126,7 +126,7 @@ for file in 1.rawdata/*_1.fq.gz; do
     --readFilesIn ./3.trim/${filename}_1_val_1.fq.gz ./3.trim/${filename}_2_val_2.fq.gz \
     --runThreadN 20 --readFilesCommand zcat --outTmpDir ${TmpPath}/${filename} \
     --outFilterMultimapNmax 1 --outFilterScoreMinOverLread 0.1 --outFilterMatchNminOverLread 0.1 \
-    –-genomeLoad LoadAndKeep >4.StarResult/Star_${filename}.log 2>&1
+    --genomeLoad LoadAndKeep >4.StarResult/Star_${filename}.log 2>&1
 done
 STAR --genomeLoad Remove --genomeDir ${indexPath}
 ```
