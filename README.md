@@ -129,14 +129,14 @@ for file in 1.rawdata/*_1.fq.gz; do
     --outFilterMultimapNmax 1 --outFilterScoreMinOverLread 0.1 --outFilterMatchNminOverLread 0.1 \
     --genomeLoad LoadAndKeep >4.StarResult/Star_${filename}.log 2>&1
 done
-STAR --genomeLoad Remove --genomeDir ${indexPath}
+STAR --genomeLoad Remove --genomeDir ${IndexPath}
 ```
 #### 2. Add read group
 Add read group for each sample.
 ```
 mkdir 5.removeDup
-for file in 1.rawdata/*_raw_1.fq.gz; do
-    filename=$(echo "$file" | sed -E 's|1.rawdata/(.*)_raw_1.fq.gz|\1|')
+for file in 1.rawdata/*_1.fq.gz; do
+    filename=$(echo "$file" | sed -E 's|1.rawdata/(.*)_1.fq.gz|\1|')
     echo ${filename}_Aligned.sortedByCoord.out.bam
     samtools index -@ 16 4.StarResult/${filename}_Aligned.sortedByCoord.out.bam
     picard AddOrReplaceReadGroups \
