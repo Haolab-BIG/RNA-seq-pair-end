@@ -84,6 +84,7 @@ conda install bioconda::picard
 conda install bioconda::subread
 conda install bioconda::deeptools
 conda install bioconda::homer
+conda install bioconda::star
 ```
 
 ## Part II Generation of Data for Analysis: FASTQ2BAM
@@ -98,11 +99,11 @@ fastqc -o 2.FastQC --noextract -f fastq ./1.rawdata/*.fq.gz -t 16 >2.FastQC/fast
 Based on the quality control results, you can perform appropriate trimming on the raw data.
 ```
 mkdir 3.trim
-for file in 1.rawdata/*_raw_1.fq.gz; do
-    filename=$(echo "$file" | sed -E 's|1.rawdata/(.*)_raw_1.fq.gz|\1|')
+for file in 1.rawdata/*_1.fq.gz; do
+    filename=$(echo "$file" | sed -E 's|1.rawdata/(.*)_1.fq.gz|\1|')
     echo ${filename}
     trim_galore -q 25 --cores 16 --phred33 --fastqc --length 36 -e 0.1 --stringency 3 \
-    --paired ./1.rawdata/${filename}_raw_1.fq.gz ./1.rawdata/${filename}_raw_2.fq.gz \
+    --paired ./1.rawdata/${filename}_1.fq.gz ./1.rawdata/${filename}_2.fq.gz \
     -o ./3.trim >3.trim/trim-${filename}.log 2>&1
 done
 ```
@@ -116,13 +117,13 @@ Align the quality-controlled FASTQ files to the reference genome, filter for hig
 mkdir 4.StarResult
 IndexPath=
 TmpPath=
-for file in 1.rawdata/*_raw_1.fq.gz; do
-    filename=$(echo "$file" | sed -E 's|1.rawdata/(.*)_raw_1.fq.gz|\1|')
+for file in 1.rawdata/*_1.fq.gz; do
+    filename=$(echo "$file" | sed -E 's|1.rawdata/(.*)_1.fq.gz|\1|')
     echo ${filename}
-    STAR --runMode alignReads --genomeDir ${indexPath} \
+    STAR --runMode alignReads --genomeDir ${IndexPath} \
     --outFileNamePrefix ./4.StarResult/${filename}_ \
     --outSAMattributes All --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate \
-    --readFilesIn ./3.trim/${filename}_raw_1_val_1.fq.gz ./3.trim/${filename}_raw_2_val_2.fq.gz \
+    --readFilesIn ./3.trim/${filename}_1_val_1.fq.gz ./3.trim/${filename}_2_val_2.fq.gz \
     --runThreadN 20 --readFilesCommand zcat --outTmpDir ${TmpPath}/${filename} \
     --outFilterMultimapNmax 1 --outFilterScoreMinOverLread 0.1 --outFilterMatchNminOverLread 0.1 \
     –-genomeLoad LoadAndKeep >4.StarResult/Star_${filename}.log 2>&1
@@ -151,7 +152,7 @@ done
 #### 3. Remove Duplicates
 Remove duplicate sequences.
 ```
-for file in 1.rawdata/*_raw_1.fq.gz; do
+for file in 1.rawdata/*_1.fq.gz; do
     filename=$(echo "$file" | sed -E 's|1.rawdata/(.*)_raw_1.fq.gz|\1|')
     picard MarkDuplicates I=5.removeDup/${filename}_readgroup.bam O=5.removeDup/${filename}_removeDup.bam M=5.removeDup/${filename}_marked_dup_metrics.txt REMOVE_DUPLICATES=true READ_NAME_REGEX=null >5.removeDup/MarkDuplicates_${filename}.log 2>&1 &
 done
