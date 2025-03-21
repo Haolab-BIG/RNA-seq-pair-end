@@ -180,9 +180,9 @@ You can visualize these results in the UCSC genome browser or IGV genome browser
 mkdir 6.bw
 for file in 1.rawdata/*_1.fq.gz; do
     filename=$(echo "$file" | sed -E 's|1.rawdata/(.*)_1.fq.gz|\1|')
-    echo ${filename}_removeDup.bam >> 7.bw/bw.log
+    echo ${filename}_removeDup.bam >> 6.bw/bw.log
     samtools index -@ 16 5.removeDup/${filename}_removeDup.bam
-    bamCoverage -b 5.removeDup/${filename}_removeDup.bam -o 7.bw/${filename}_removeDup.bw  -p 30 --binSize 1 --scaleFactor 1 --normalizeUsing CPM >>  7.bw/bw.log 2>&1
+    bamCoverage -b 5.removeDup/${filename}_removeDup.bam -o 6.bw/${filename}_removeDup.bw  -p 30 --binSize 1 --scaleFactor 1 --normalizeUsing CPM >>  6.bw/bw.log 2>&1
 done
 ```
 ## Part IV Analysis of Gene Expression
