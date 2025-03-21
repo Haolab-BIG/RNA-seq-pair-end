@@ -87,6 +87,7 @@ conda install bioconda::homer
 conda install bioconda::star
 conda install bioconda::samtools
 conda install -c conda-forge openjdk
+conda install R
 ```
 
 ## Part II Generation of Data for Analysis: FASTQ2BAM
@@ -205,6 +206,9 @@ install.packages("ggpubr")
 library(gmodels)
 library(ggplot2)
 library(ggpubr)
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("edgeR")
 featureCountsPath <-
 setwd(featureCountsPath)#your own path e.g:7.featureCounts
 total.counts <- read.table("TotalSample.txt", sep = "\t", header= T, quote = "")
