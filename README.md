@@ -203,9 +203,11 @@ Calculate TPM(TPM, Transcripts Per Kilobase of exon model per Million mapped rea
 install.packages("gmodels")
 install.packages("ggplot2")
 install.packages("ggpubr")
+install.packages("pheatmap")
 library(gmodels)
 library(ggplot2)
 library(ggpubr)
+library(pheatmap)
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("edgeR")
@@ -253,8 +255,8 @@ getDiffExpression.pl 7.featureCounts/IN.count.txt IN_CO IN_CO IN_CO IN_MO IN_MO 
 Set filtering criterion, and obtain differentially expressed genes.
 ```
 IN.homer <-  read.table("diffOutput_IN.txt",sep = "\t", header = T, quote = "")
-colnames(IN.homer)[1:7] <- colnames(IN.count)
-colnames(IN.homer)[8:10] <- c("logFC","p","p.adj")
+colnames(IN.homer)[1:7] <- colnames(IN.count)#determined by your own column
+colnames(IN.homer)[8:10] <- c("logFC","p","p.adj")#determined by your own column
 IN.up <- IN.homer[IN.homer$p<0.05 & IN.homer$logFC>1,]
 IN.down <- IN.homer[IN.homer$p<0.05 & IN.homer$logFC< -1,]
 IN.notsig <- IN.homer[!IN.homer$Geneid%in%IN.up$Geneid & !IN.homer$Geneid%in%IN.down$Geneid,]
