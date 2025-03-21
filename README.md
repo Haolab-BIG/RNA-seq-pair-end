@@ -211,6 +211,8 @@ library(pheatmap)
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("edgeR")
+BiocManager::install("org.Hs.eg.db")
+library(org.Hs.eg.db)
 featureCountsPath <-
 setwd(featureCountsPath)#your own path e.g:7.featureCounts
 total.counts <- read.table("TotalSample.txt", sep = "\t", header= T, quote = "")
