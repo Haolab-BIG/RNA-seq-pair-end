@@ -310,7 +310,7 @@ ggsave("IN.heatmap.pdf", plot = p, device = "pdf", width = 4, height = 8, path =
 #### 5.Functional analysis
 GO (GO, Gene Ontology) Enrichment Analysis
 ```
-library(org.Hs.eg.db)
+library(dplyr)
 keytypes(org.Hs.eg.db)
 IN.sig.gene <- rbind(IN.up,IN.down)
 IN.sig.gene <- IN.sig.gene %>% select(Geneid, logFC, p, p.adj)
