@@ -239,7 +239,7 @@ p <- ggscatter(pca.data, x = "PC1", y = "PC2", color = "sample") +
     y = paste("PC2 (", pc2_contribution, "%)", sep="")
   )
 ggsave("PCA_total.pdf", plot = p, device = "pdf", width = 8, height = 4, path = featureCountsPath)
-IN.count <- total.counts[,c(1,12:14,16:18)]  #Geneid and selected samples
+IN.count <- total.counts  #Geneid and selected samples
 write.table(IN.count,"IN.count.txt",sep = "\t",col.names = T,row.names = F,quote = F)
 ```
 #### 3. Calculate the difference between two groups
