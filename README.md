@@ -118,6 +118,12 @@ Align the quality-controlled FASTQ files to the reference genome, filter for hig
 mkdir 4.StarResult
 IndexPath=
 TmpPath=
+STAR --runThreadN 20 \
+     --runMode genomeGenerate \
+     --genomeDir ${IndexPath} \
+     --genomeFastaFiles /path/to/genome.fa \
+     --sjdbGTFfile /path/to/annotations.gtf \
+     --sjdbOverhang 100  # 通常为读段长度减1
 for file in 1.rawdata/*_1.fq.gz; do
     filename=$(echo "$file" | sed -E 's|1.rawdata/(.*)_1.fq.gz|\1|')
     echo ${filename}
@@ -142,7 +148,7 @@ for file in 1.rawdata/*_1.fq.gz; do
     picard AddOrReplaceReadGroups \
     I=4.StarResult/${filename}_Aligned.sortedByCoord.out.bam \
     O=5.removeDup/${filename}_readgroup.bam \
-    RGID=4 \
+    RGID=4 \                    
     RGLB=lib1 \
     RGPL=illumina \
     RGPU=unit1 \
