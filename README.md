@@ -200,7 +200,7 @@ featureCounts -a ./Index/gencode.v47.annotation.gtf -s 2 -p --countReadPairs -B 
 Calculate TPM(TPM, Transcripts Per Kilobase of exon model per Million mapped reads) through gene length and sequencing depth.
 ```
 featureCountsPath <-
-setwd(featureCountsPath)
+setwd(featureCountsPath)#your own path e.g:7.featureCounts
 total.counts <- read.table("TotalSample.txt", sep = "\t", header= T, quote = "")
 total.counts <- total.counts[,-c(2,3,4,5)]
 total.counts$Geneid <- sub("\\..*$","",total.counts$Geneid)
