@@ -86,6 +86,7 @@ conda install bioconda::deeptools
 conda install bioconda::homer
 conda install bioconda::star
 conda install bioconda::samtools
+conda install -c conda-forge openjdk
 ```
 
 ## Part II Generation of Data for Analysis: FASTQ2BAM
