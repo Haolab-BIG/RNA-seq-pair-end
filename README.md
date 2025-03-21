@@ -232,10 +232,7 @@ pc1_contribution <- round(pc_contribution[1] * 100, 2)
 pc2_contribution <- round(pc_contribution[2] * 100, 2)
 p <- ggscatter(pca.data, x = "PC1", y = "PC2", color = "sample") +
   scale_color_manual(values = c(
-    "231_CO"="#8c510a","231_CO.rep1"="#bf812d","231_CO.rep2"="#dfc27d","231_CO.rep3"="#f6e8c3",
-    "231_MO"="#01665e","231_MO.rep1"="#35978f","231_MO.rep2"="#80cdc1","231_MO.rep3"="#c7eae5",
-    "iN_CO"="#762a83","iN_CO.rep1"="#9970ab","iN_CO.rep2"="#c2a5cf","iN_CO.rep3"="#e7d4e8",
-    "iN_MO"="#2166ac","iN_MO.rep1"="#4393c3","iN_MO.rep2"="#92c5de","iN_MO.rep3"="#d1e5f0"
+    "m.1.LGJ21692_L0"="#8c510a","m.13.LGJ21695_L2"="#bf812d","m.25.LGJ21698_L2"="#dfc27d","m.28.LGJ21701_L2"="#f6e8c3"
   )) +
   theme_base() +
   labs(
@@ -243,14 +240,14 @@ p <- ggscatter(pca.data, x = "PC1", y = "PC2", color = "sample") +
     y = paste("PC2 (", pc2_contribution, "%)", sep="")
   )
 ggsave("PCA_total.pdf", plot = p, device = "pdf", width = 8, height = 4, path = featureCountsPath)
-IN.count <- total.counts  #Geneid and selected samples
+IN.count <- total.counts[,c(1,4,6,3,5)]  #Geneid and selected samples
 write.table(IN.count,"IN.count.txt",sep = "\t",col.names = T,row.names = F,quote = F)
 ```
 #### 3. Calculate the difference between two groups
 Calculate logFC and p value for each gene between two groups using read counts.
 
 ```
-getDiffExpression.pl 7.featureCounts/IN.count.txt IN_CO IN_CO IN_CO IN_MO IN_MO IN_MO -edgeR > 7.featureCounts/diffOutput_IN.txt 2> 7.featureCounts/diffOutput_IN.log &
+getDiffExpression.pl 7.featureCounts/IN.count.txt IN_CO IN_CO IN_CO IN_MO IN_MO IN_MO -edgeR > 7.featureCounts/diffOutput_IN.txt 2> 7.featureCounts/diffOutput_IN.log & #IN_CO IN_MO have to consistent to column in IN.count.txt
 ```
 #### 4. Filter out differentially expressed genes
 Set filtering criterion, and obtain differentially expressed genes.
