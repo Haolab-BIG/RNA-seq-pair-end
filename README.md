@@ -210,7 +210,7 @@ rownames(total.feature) <- total.feature$Geneid
 total.feature <- total.feature[,-1]
 total.feature$kb <- total.feature$Length/1000
 total.rpk <- total.feature[,c(2:(ncol(total.feature)-1))] / total.feature$kb
-total.tpm <- as.data.frame(t(t(total.rpk)/colSums(total.rpk) * 1000000)
+total.tpm <- as.data.frame(t(t(total.rpk)/colSums(total.rpk) * 1000000))
 ```
 #### 2. Observe batch effect
 Batch effects between samples can be identified, allowing for either correction or selective sample screening as needed.
