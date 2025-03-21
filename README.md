@@ -142,11 +142,11 @@ for file in 1.rawdata/*_1.fq.gz; do
     picard AddOrReplaceReadGroups \
     I=4.StarResult/${filename}_Aligned.sortedByCoord.out.bam \
     O=5.removeDup/${filename}_readgroup.bam \
-    RGID=${filename} \
-    RGLB=${filename} \
+    RGID=4 \
+    RGLB=lib1 \
     RGPL=illumina \
-    RGPU=${filename} \
-    RGSM=${filename} > 5.removeDup/read.group_${filename}.log 2>&1 &
+    RGPU=unit1 \
+    RGSM=20 > 5.removeDup/read.group_${filename}.log 2>&1 &
 done
 ```
 
@@ -157,6 +157,7 @@ for file in 1.rawdata/*_1.fq.gz; do
     filename=$(echo "$file" | sed -E 's|1.rawdata/(.*)_1.fq.gz|\1|')
     picard MarkDuplicates I=5.removeDup/${filename}_readgroup.bam O=5.removeDup/${filename}_removeDup.bam M=5.removeDup/${filename}_marked_dup_metrics.txt REMOVE_DUPLICATES=true READ_NAME_REGEX=null >5.removeDup/MarkDuplicates_${filename}.log 2>&1 &
 done
+#excute blow codes after you have finished above
 for file in 1.rawdata/*_1.fq.gz; do
     filename=$(echo "$file" | sed -E 's|1.rawdata/(.*)_1.fq.gz|\1|')
     echo ${filename}_removeDup.bam >>5.removeDup/samflag.log
