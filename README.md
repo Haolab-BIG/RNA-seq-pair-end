@@ -200,10 +200,10 @@ featureCounts -a ./Index/gencode.v47.annotation.gtf -s 2 -p --countReadPairs -B 
 Calculate TPM(TPM, Transcripts Per Kilobase of exon model per Million mapped reads) through gene length and sequencing depth.
 ```
 install.packages("gmodels")
-install.packages("ggplot")
+install.packages("ggplot2")
 install.packages("ggpubr")
 library(gmodels)
-library(ggplot)
+library(ggplot2)
 library(ggpubr)
 featureCountsPath <-
 setwd(featureCountsPath)#your own path e.g:7.featureCounts
