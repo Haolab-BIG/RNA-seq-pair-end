@@ -199,6 +199,7 @@ featureCounts -a ./Index/gencode.v47.annotation.gtf -s 2 -p --countReadPairs -B 
 #### 1. Scale the gene expression
 Calculate TPM(TPM, Transcripts Per Kilobase of exon model per Million mapped reads) through gene length and sequencing depth.
 ```
+install.packages("gmodels")
 featureCountsPath <-
 setwd(featureCountsPath)#your own path e.g:7.featureCounts
 total.counts <- read.table("TotalSample.txt", sep = "\t", header= T, quote = "")
