@@ -193,7 +193,7 @@ In this section, you will acquire gene expression data and perform a series of a
 Count mapped reads for genomic features such as genes.
 ```
 mkdir 7.featureCounts
-featureCounts -a ./Index/gencode.v47.annotation.gtf -s 2 -p --countReadPairs -B -T 30  --ignoreDup -o ./7.featureCounts/TotalSample.txt 5.removeDup/*_removeDup.bam  > ./7.featureCounts/featureCounts.log 2>&1 &
+featureCounts -a ./Index/gencode.v47.annotation.gtf -s 2 -p --countReadPairs -B -T 30  --ignoreDup -o ./7.featureCounts/TotalSample.txt 5.removeDup/*_removeDup.bam  > ./7.featureCounts/featureCounts.log 2>&1 & #Indexx is determined by yourself
 ```
 ### ii.Identify differentially expressed genes
 
@@ -205,19 +205,19 @@ install.packages("ggplot2")
 install.packages("ggpubr")
 install.packages("pheatmap")
 install.packages("dplyr")
-library(gmodels)
-library(ggplot2)
-library(ggpubr)
-library(pheatmap)
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("edgeR")
 BiocManager::install("org.Hs.eg.db")
 BiocManager::install("clusterProfiler")
+library(gmodels)
+library(ggplot2)
+library(ggpubr)
+library(pheatmap)
 library(org.Hs.eg.db)
 library(clusterProfiler)
 featureCountsPath <-
-setwd(featureCountsPath)#your own path e.g:7.featureCounts
+setwd(featureCountsPath)#your own path
 total.counts <- read.table("TotalSample.txt", sep = "\t", header= T, quote = "")
 total.counts <- total.counts[,-c(2,3,4,5)]
 total.counts$Geneid <- sub("\\..*$","",total.counts$Geneid)
@@ -311,7 +311,7 @@ ggsave("IN.heatmap.pdf", plot = p, device = "pdf", width = 4, height = 8, path =
 GO (GO, Gene Ontology) Enrichment Analysis
 ```
 library(dplyr)
-keytypes(org.Hs.eg.db)
+keytypes(org.Hs.eg.db)#determined by your sample'species
 IN.sig.gene <- rbind(IN.up,IN.down)
 IN.sig.gene <- IN.sig.gene %>% select(Geneid, logFC, p, p.adj)
 row.names(IN.sig.gene) <- IN.sig.gene$Geneid
