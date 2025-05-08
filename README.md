@@ -90,7 +90,7 @@ conda install -c conda-forge openjdk
 conda install R
 ```
 
-## Part II Generation of Data for Analysis: FASTQ2BAM
+## Part II Generation of Data for Analysis
 In this section, you will convert the raw FASTQ files into BAM files, which can be used for subsequent analysis.
 ### i. Raw Data Quality Check(QC)
 You can perform quality check on the raw data to assess the sequencing quality.
@@ -172,7 +172,7 @@ for file in 1.rawdata/*_1.fq.gz; do
     samtools flagstat -@ 10 5.removeDup/${filename}_removeDup.bam >> 5.removeDup/samflag.log
 done
 ```
-## Part III Visualization on Genome Browser: BAM2BW
+## Part III Visualization on Genome Browser
 Convert the alignment results into files with lower resolution but smaller size for easier browsing across the genome; simultaneously, assess the correlation among the experimental samples.
 
 ### i. Visualization on Genome Browser
@@ -189,7 +189,7 @@ done
 ## Part IV Analysis of Gene Expression
 In this section, you will acquire gene expression data and perform a series of analyses based on it.
 
-### i. Quantification for genomic features: BAM2TAB
+### i. Quantification for genomic features
 Count mapped reads for genomic features such as genes.
 ```
 mkdir 7.featureCounts
