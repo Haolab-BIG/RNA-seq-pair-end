@@ -8,12 +8,10 @@ This is a unified, automated RNA-seq pipeline designed to run a complete analysi
 ## Features
 
 -   **Single Command Execution**: Runs the entire workflow, including per-sample processing and final DEG analysis, with one command.
--   **Batch Processing**: Automatically processes all samples listed in a central `samplesheet.csv`.
 -   **Two Modes**: Supports both alignment-based (`align`) and alignment-free (`quant`) workflows.
     -   **`align` mode**: STAR -> samtools -> featureCounts -> DESeq2. Generates BAM, BigWig, and count files.
     -   **`quant` mode**: Salmon -> DESeq2. Generates transcript quantifications.
 -   **Reproducible**: All software is encapsulated within a Singularity container (`RNA.sif`).
--   **Automated Reporting**: Generates a project-wide, interactive MultiQC report summarizing quality metrics across all samples.
 
 ## Requirements
 
@@ -28,7 +26,7 @@ This is a unified, automated RNA-seq pipeline designed to run a complete analysi
 
 ### 1. Prepare the Sample Sheet
 
-This is the most critical input file. Create a CSV file named `samplesheet.csv` with a header and four columns (no spaces): `sample`, `condition`, `fastq1_path`, `fastq2_path`.
+This is the most critical input file. Create a CSV file named `samplesheet.csv`.
 
 -   `sample`: A unique identifier for the sample (e.g., `Control_Rep1`). This name will be used for output subdirectories.
 -   `condition`: The experimental group for the sample (e.g., `Control`, `Treated`). This is used for the DESeq2 design.
@@ -44,8 +42,6 @@ Control_Rep2,Control,/path/to/data/Control_Rep2_R1.fastq.gz,/path/to/data/Contro
 Treated_Rep1,Treated,/path/to/data/Treated_Rep1_R1.fastq.gz,/path/to/data/Treated_Rep1_R2.fastq.gz
 Treated_Rep2,Treated,/path/to/data/Treated_Rep2_R1.fastq.gz,/path/to/data/Treated_Rep2_R2.fastq.gz
 ````
-
-**Important**: Using absolute paths is highly recommended to avoid ambiguity.
 
 ### 2\. Prepare the Reference Genome
 
