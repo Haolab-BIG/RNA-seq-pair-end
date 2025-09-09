@@ -3,7 +3,7 @@
 This is a unified, automated RNA-seq pipeline designed to run a complete analysis from raw FASTQ files to differential expression results. It leverages Singularity for reproducibility and is capable of batch processing multiple samples.
 
 ## Workflow Diagram
-![Workflow](/Users/zhanghe/课题/Easy_omics/RNA/RNA-seq_pipiline.png)
+![Workflow](Haolab-BIG/RNA-seq-pair-end/RNA-seq-pair-end.pdf)
 
 ## Features
 
