@@ -1,6 +1,6 @@
 # RNA-seq Pipeline
 
-This is a unified, automated RNA-seq pipeline designed to run a complete analysis from raw FASTQ files to differential expression results. It leverages Singularity for reproducibility and is capable of batch processing multiple samples.
+This is a unified RNA-seq pipeline designed to run a complete analysis from raw FASTQ files to differential expression results. It leverages Singularity for reproducibility and is capable of batch processing multiple samples.
 
 ## Workflow Diagram
 ![Workflow](RNA_seq_pipeline.png)
